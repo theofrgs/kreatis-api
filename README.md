@@ -1,1 +1,1 @@
-# kreatis-api
+# replica-api
