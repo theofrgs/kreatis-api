@@ -1,0 +1,83 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - develop
+  workflow_call:
+    secrets:
+        API:
+          required: true
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        id: checkout_code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Launch linter
+        run: pnpm lint
+
+  nest-test:
+    runs-on: ubuntu-latest
+    needs: [linter]
+    steps:
+      - name: Checkout code
+        id: checkout_code
+        uses: actions/checkout@v3
+
+      - name: Create .env
+        id: create_env
+        run: echo "${{ secrets.API }}" > .env
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Launch database
+        run: docker-compose up -d database
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Run tests coverage
+        run: pnpm test:cov
+
+      - name: Run tests end to end
+        run: pnpm test:e2e
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [nest-test]
+    steps:
+      - name: Checkout code
+        id: checkout_code
+        uses: actions/checkout@v3
+
+      - name: Create .env
+        id: create_env
+        run: echo "${{ secrets.API }}" > .env
+
+      - name: Build full compose
+        run: docker-compose build
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Build and push Docker images with Docker Compose
+  #       run: |
+  #         docker-compose build
+
+      # - name: Deploy to server (replace with your deployment steps)
+      #   run: |
+      #     ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
+      #     scp -r your-docker-compose.yml your-server-user@your-server-ip:/path/to/remote/directory/
+      #     ssh your-server-user@your-server-ip "cd /path/to/remote/directory/ && docker-compose pull && docker-compose up -d"
