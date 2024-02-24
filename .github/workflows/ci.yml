@@ -14,18 +14,18 @@ on:
 
 jobs:
   linter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16.14'
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@6
 
       - name: Install dependencies
         run: pnpm install
@@ -34,7 +34,7 @@ jobs:
         run: pnpm lint
 
   nest-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: []
     steps:
       - name: Checkout code
@@ -43,8 +43,13 @@ jobs:
       - name: Create .env
         run: echo "${{ secrets.API }}" > .env
 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.14'
+
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@6
 
       - name: Install dependencies
         run: pnpm install
@@ -59,7 +64,7 @@ jobs:
         run: pnpm test:e2e
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: [nest-test]
     steps:
       - name: Checkout code
@@ -67,6 +72,14 @@ jobs:
 
       - name: Create .env
         run: echo "${{ secrets.API }}" > .env
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.14'
+
+      - name: Install pnpm
+        run: npm install -g pnpm@6
 
       - name: Build full compose
         run: docker-compose build
