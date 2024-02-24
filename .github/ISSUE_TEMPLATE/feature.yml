@@ -1,0 +1,49 @@
+name: "💡 Feature "
+description: Create a new ticket for a new feature
+title: "💡 <title>"
+labels: [
+  "🏗️ Feature",
+  "💾 Backend"
+]
+body:
+  - type: textarea
+    id: implementation_pr
+    attributes:
+      label: "Implementation PR"
+      description: Pull  used
+      placeholder: "#Pull  ID"
+    validations:
+      required: false
+  - type: textarea
+    id: reference_issues
+    attributes:
+      label: "Reference Issues"
+      description: Common issues
+      placeholder: "#Issues IDs"
+    validations:
+      required: false
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Summary"
+      description: Provide a brief explanation of the feature
+      placeholder: Describe in a few lines your feature
+    validations:
+      required: true
+  - type: textarea
+    id: benefits
+    attributes:
+      label: "Benefits"
+      description: Indicate here some benefits of your feature.
+      placeholder: A few specific words about your feature .
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      value: |
+          ## (What do engineers have to do step by step?)
+          - [ ] Verify the issue
+          - [ ] Solve the issue
+          - [ ] Test the solution
