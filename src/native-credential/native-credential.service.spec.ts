@@ -148,7 +148,7 @@ describe('NativeCredentialService', () => {
     });
 
     it('Basic', async () => {
-      const deleteResult: any = await service.remove(nativeCredential.id);
+      const deleteResult: string = await service.remove(nativeCredential.id);
 
       expect(deleteResult).toBe(`${nativeCredential.id} has been removed`);
       const deletedNativeCredential: NativeCredential | null =
