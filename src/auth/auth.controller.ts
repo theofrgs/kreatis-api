@@ -7,11 +7,11 @@ import { CreateNativeRegisterDTO } from './dto/create-auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
-@Public()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   // NATIVE PART
+  @Public()
   @ApiOperation({ summary: 'Login native user' })
   @ApiBody({ type: CreateNativeCredentialDTO })
   @HttpCode(HttpStatus.OK)
@@ -20,6 +20,7 @@ export class AuthController {
     return await this.authService.loginNative(dto);
   }
 
+  @Public()
   @ApiOperation({ summary: 'Register native user' })
   @ApiBody({ type: CreateNativeRegisterDTO })
   @HttpCode(HttpStatus.CREATED)

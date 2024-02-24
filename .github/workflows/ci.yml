@@ -60,9 +60,6 @@ jobs:
       - name: Run tests coverage
         run: pnpm test:cov
 
-      - name: Launch database
-        run: docker-compose up -d database
-
       - name: Run tests end to end
         run: pnpm test:e2e
 
